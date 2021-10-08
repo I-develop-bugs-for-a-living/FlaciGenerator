@@ -1,0 +1,72 @@
+﻿{
+  "name": "Nicks Herdplatte 2",
+  "description": "",
+  "type": "MOORE",
+  "automaton": {
+    "acceptCache": [],
+    "simulationInput": [],
+    "Alphabet": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "+",
+      "-"
+    ],
+    "StackAlphabet": [
+      "|"
+    ],
+    "States": [
+      {
+        "ID": 1,
+        "Name": "q0",
+        "x": 150,
+        "y": 150,
+        "Final": false,
+        "Radius": 30,
+        "Transitions": [
+          {
+            "Source": 1,
+            "Target": 2,
+            "x": 0,
+            "y": 0,
+            "Labels": [
+              "a"
+            ]
+          }
+        ],
+        "Start": true,
+        "Output": "sdf"
+      },
+      {
+        "ID": 2,
+        "Name": "q1",
+        "x": 205,
+        "y": 294,
+        "Final": false,
+        "Radius": 30,
+        "Transitions": [
+          {
+            "Source": 2,
+            "Target": 3,
+            "x": 0,
+            "y": 0,
+            "Labels": []
+          }
+        ],
+        "Start": false
+      },
+      {
+        "ID": 3,
+        "Name": "q2",
+        "x": 460,
+        "y": 130,
+        "Final": false,
+        "Radius": 30,
+        "Transitions": [],
+        "Start": false
+      }
+    ],
+    "lastInputs": []
+  }
+}
