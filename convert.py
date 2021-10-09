@@ -1,13 +1,30 @@
 from tkinter import *
 import json
 import random
-
+import string
+import itertools as it
 
 def generating():
-    print("sucesse")
-    startNode = createState(id=1, name="q0", transitions=[], start=True, output="Nick sucks")
+    nodeList = []
+    nodeList.append(['x', (0, 0), 'q0', [], True, "x" + "0"*int(numPlatten.get())])
     alphabet = createAlphabet()
-    layout = createLayout(alphabet, startNode)
+    # startNode = createState(id=1, name="q0", transitions=[], start=True, output=outputstring)
+    stufenList = [str(x) for x in range(int(numStufen.get()))]
+    states = []
+    
+    counter = 1
+    for i in range(int(numPlatten.get())):
+        letter = string.ascii_lowercase[i]
+        for i in it.product(stufenList, repeat=int(numPlatten.get())):
+            nodeList.append([letter, i, f'q{counter}', [], False, f'{letter}'+''.join(i)])
+            counter += 1
+    
+    print(nodeList)
+
+    for i in nodeList:
+        pass
+            
+    layout = createLayout(alphabet, states)
 
     x = json.dumps(layout)
 
@@ -15,12 +32,17 @@ def generating():
         f.write(x)
     
 def createAlphabet():
-    return ["A", "B", "C"]
+    alph = []
+    for i in range(int(numPlatten.get())):
+        alph.append(string.ascii_uppercase[i])
+    for i in range(int(numStufen.get())):
+        alph.append(str(i))
+    return alph
 
 def createLayout(alphabet, states):
-    dictLayout = {"name": "Nicks Herdplatte",
-            "description": "Hello World",
-            "type": "DEA",
+    dictLayout = {"name": "NEF Cookingstation",
+            "description": "200",
+            "type": "MOORE",
             "automaton": {
                 "acceptCache": [],
                 "simulationInput": [],
