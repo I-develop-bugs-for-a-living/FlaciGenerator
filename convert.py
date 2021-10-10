@@ -20,8 +20,6 @@ def generating():
             # nodeList[output/idcode] = [startingletter, numbercode, id, name, transitions, startnode, output/idcode]
             nodeList[f'{letter}'+''.join(i)] = [letter, i, counter+1,f'q{counter}', [], False, f'{letter}'+''.join(i)]
             counter += 1
-    
-    print(nodeList)
 
     for i in nodeList:
         activeLetter = i[0]
@@ -50,7 +48,7 @@ def generating():
     
     layout = createLayout(alphabet, states)
 
-    x = json.dumps(layout)
+    x = json.dumps(layout, indent=2)
 
     with open("output.json", "w") as f:
         f.write(x)
