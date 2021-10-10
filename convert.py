@@ -5,39 +5,71 @@ import string
 import itertools as it
 
 def generating():
-    nodeList = []
-    nodeList.append(['x', (0, 0), 'q0', [], True, "x" + "0"*int(numPlatten.get())])
-    alphabet = createAlphabet()
+    nodeList = {}
+    nodeList['X'+"0"*int(numPlatten.get())] = ['X', (0, 0), 1,'q0', [createTransition(1,1,0,0,["+", "-"])], True, "X" + "0"*int(numPlatten.get())]
+    alphabet, platten = createAlphabetPlatten()
     # startNode = createState(id=1, name="q0", transitions=[], start=True, output=outputstring)
     stufenList = [str(x) for x in range(int(numStufen.get()))]
+    positionList = {key: value for value, key in enumerate(platten)}
     states = []
     
     counter = 1
     for i in range(int(numPlatten.get())):
-        letter = string.ascii_lowercase[i]
+        letter = string.ascii_uppercase[i]
         for i in it.product(stufenList, repeat=int(numPlatten.get())):
-            nodeList.append([letter, i, f'q{counter}', [], False, f'{letter}'+''.join(i)])
+            # nodeList[output/idcode] = [startingletter, numbercode, id, name, transitions, startnode, output/idcode]
+            nodeList[f'{letter}'+''.join(i)] = [letter, i, counter+1,f'q{counter}', [], False, f'{letter}'+''.join(i)]
             counter += 1
     
     print(nodeList)
 
     for i in nodeList:
-        pass
-            
+        activeLetter = i[0]
+        numberCode = i[1:]
+        for j in platten:
+            if activeLetter != j:
+                nodeList[i][4].append(createTransition(nodeList[i][2], nodeList[j+numberCode][2], 0,0,[j]))
+            if activeLetter == j:
+                nodeList[i][4].append(createTransition(nodeList[i][2], nodeList[i][2], 0,0, [j]))
+        
+        if activeLetter != 'X':
+            position = positionList[activeLetter]
+            if int(numberCode[position])-1 >= 0:
+                node = activeLetter + mutateString(numberCode, position, str(int(numberCode[position])-1))
+                nodeList[i][4].append(createTransition(nodeList[i][2], nodeList[node][2], 0,0,"-"))
+            else:
+                nodeList[i][4].append(createTransition(nodeList[i][2], nodeList[i][2], 0,0,"-"))
+            if int(numberCode[position])+1<int(numStufen.get()):
+                node = activeLetter + mutateString(numberCode, position, str(int(numberCode[position])+1))
+                nodeList[i][4].append(createTransition(nodeList[i][2], nodeList[node][2], 0,0, "+"))
+            else:
+                nodeList[i][4].append(createTransition(nodeList[i][2], nodeList[i][2], 0,0,"+"))
+
+    for i in nodeList:
+        states.append(createState(nodeList[i][2], nodeList[i][3], nodeList[i][4], nodeList[i][5], nodeList[i][6]))
+    
     layout = createLayout(alphabet, states)
 
     x = json.dumps(layout)
 
     with open("output.json", "w") as f:
         f.write(x)
+
+def mutateString(string, position, replacement):
+    temp = list(string)
+    temp[position] = replacement
+    temp = "".join(temp)
+    return temp
     
-def createAlphabet():
+def createAlphabetPlatten():
     alph = []
+    platten = []
     for i in range(int(numPlatten.get())):
         alph.append(string.ascii_uppercase[i])
-    for i in range(int(numStufen.get())):
-        alph.append(str(i))
-    return alph
+        platten.append(string.ascii_uppercase[i])
+    alph.append("+")
+    alph.append("-")
+    return alph, platten
 
 def createLayout(alphabet, states):
     dictLayout = {"name": "NEF Cookingstation",
