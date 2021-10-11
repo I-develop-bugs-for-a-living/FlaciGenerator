@@ -3,6 +3,7 @@ import json
 import random
 import string
 import itertools as it
+import webbrowser
 
 def generating():
     nodeList = {}
@@ -52,6 +53,8 @@ def generating():
 
     with open("output.json", "w") as f:
         f.write(x)
+
+    
 
 def mutateString(string, position, replacement):
     temp = list(string)
@@ -110,6 +113,9 @@ def createTransition(source, target, x, y, labels):
     }
     return dictTransition
 
+def opening():
+    webbrowser.open("Flaci.com/A38")
+
 
 screen = Tk()
 screen.title("Moore-Automaten-Generator")
@@ -126,6 +132,7 @@ entryNumPlatten = Entry(textvariable=numPlatten)
 entryNumStuffen = Entry(textvariable=numStufen)
 
 startButton = Button(text="Start generating...", command=generating)
+openWBButton = Button(text="Open output.json in webbrowser...", command=opening)
 
 header.grid(row=0, column=0, columnspan=2)
 plattenLable.grid(row=1, column=0)
@@ -133,5 +140,6 @@ stuffenLable.grid(row=1, column=1)
 entryNumPlatten.grid(row=2, column=0)
 entryNumStuffen.grid(row=2, column=1)
 startButton.grid(row=3, column=0, columnspan=2)
+openWBButton.grid(row=4, column=0, columnspan=2)
 
 screen.mainloop()
