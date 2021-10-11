@@ -3,7 +3,7 @@ import json
 import random
 import string
 import itertools as it
-import webbrowser
+from selenium import webdriver
 
 def generating():
     nodeList = {}
@@ -114,7 +114,8 @@ def createTransition(source, target, x, y, labels):
     return dictTransition
 
 def opening():
-    webbrowser.open("Flaci.com/A38")
+    driver = webdriver.Edge()
+    driver.get("www.Flaci.com/A38")
 
 
 screen = Tk()
